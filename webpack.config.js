@@ -9,21 +9,53 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist')
   },
-  devtool: 'eval-source-map', 
-  devServer: {                 
-    contentBase: './dist'      
+  devtool: 'eval-source-map',
+  devServer: {
+    contentBase: './dist'
   },
   plugins: [
-    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      title: 'Blank',
-      template: './src/index.html',
-      inject: 'body'
+      filename: 'index.html',
+      template: 'src/index.html',
+      chunks: ['main']
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'constructors.html',
+      template: 'src/constructors.html',
+      chunks: ['main']
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'schedule.html',
+      template: 'src/schedule.html',
+      chunks: ['main']
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'FAQ.html',
+      template: 'src/FAQ.html',
+      chunks: ['main']
     }),
     new Dotenv()
   ],
   module: {
     rules: [
+      {
+        test: /\.(gif|png|jpe?g)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'assets/images/'
+            }
+          }
+        ]
+      },
+      {
+        test:/\.html$/,
+        use: [
+          'html-loader'
+        ]
+      },
       {
         test: /\.css$/,
         use: [
@@ -35,26 +67,6 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: "eslint-loader"
-      },
-      {
-        test: /\.(gif|png|jpe?g)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              outputPath: 'assets/images/',
-              esModule: false
-            }
-          }
-        ]
-      },
-
-      {
-        test: /\.html$/,
-        use: [
-          'html-loader'
-        ]
       }
     ]
   }
